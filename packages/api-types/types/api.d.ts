@@ -1564,9 +1564,9 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** [Beta] Get project's just-in-time access configuration. */
+    /** [Beta] Get project's temporary access configuration. */
     get: operations['v1-get-jit-access-config']
-    /** [Beta] Update project's just-in-time access configuration. */
+    /** [Beta] Update project's temporary access configuration. */
     put: operations['v1-update-jit-access-config']
     post?: never
     delete?: never
@@ -3094,7 +3094,7 @@ export interface components {
      *     } */
     JitAccessRequestRequest: {
       /** @enum {string} */
-      state: 'enabled' | 'disabled' | 'unavailable'
+      state: 'enabled' | 'disabled'
     }
     JitAccessResponse: {
       /** Format: uuid */
@@ -11208,7 +11208,7 @@ export interface operations {
         }
         content?: never
       }
-      /** @description Failed to retrieve project's JIT access config */
+      /** @description Failed to retrieve project's temporary access configuration. */
       500: {
         headers: {
           [name: string]: unknown
@@ -11262,7 +11262,7 @@ export interface operations {
         }
         content?: never
       }
-      /** @description Failed to update project's just-in-time access configuration. */
+      /** @description Failed to update project's temporary access configuration. */
       500: {
         headers: {
           [name: string]: unknown
