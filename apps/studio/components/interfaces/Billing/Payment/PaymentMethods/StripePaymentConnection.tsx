@@ -13,22 +13,20 @@ export const STRIPE_PROJECTS_DOCS_URL = 'https://docs.stripe.com/projects'
 interface StripePaymentConnectionProps {
   status?: StripeTokenStatus
   tokenLast4?: string | null
-  tokenExpMonth?: number | null
-  tokenExpYear?: number | null
+  tokenExpiresAt?: number | null
 }
 
-const formatStripeTokenExpiry = (month?: number | null, year?: number | null) => {
-  if (!month || !year) return undefined
-  return `${String(month).padStart(2, '0')}/${year}`
+const formatStripeTokenExpiry = (expiresAt?: number | null) => {
+  if (!expiresAt) return undefined
+  return new Date(expiresAt * 1000).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
 export function StripePaymentConnection({
   status = 'connected',
   tokenLast4,
-  tokenExpMonth,
-  tokenExpYear,
+  tokenExpiresAt,
 }: StripePaymentConnectionProps) {
-  const tokenExpiry = formatStripeTokenExpiry(tokenExpMonth, tokenExpYear)
+  const tokenExpiry = formatStripeTokenExpiry(tokenExpiresAt)
   const hasTokenSummary =
     tokenLast4 !== null && tokenLast4 !== undefined && tokenExpiry !== undefined
 

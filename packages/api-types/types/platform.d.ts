@@ -5022,11 +5022,24 @@ export interface components {
       workdir: string
     }
     CreateInvitationBody: {
-      email: string
+      /**
+       * Format: email
+       * @deprecated
+       */
+      email?: string
+      emails?: string[]
       require_sso?: boolean
       role_id: number
       role_scoped_projects?: string[]
     }
+    CreateInvitationResponse: {
+      failed: {
+        /** Format: email */
+        email: string
+        error: string
+      }[]
+      succeeded: string[]
+    } | null
     CreateNamespaceBody: {
       namespace: string
     }
@@ -5256,6 +5269,8 @@ export interface components {
         | 'action_runs_read'
         | 'action_runs_write'
         | 'advisors_read'
+        | 'analytics_config_read'
+        | 'analytics_config_write'
         | 'analytics_logs_read'
         | 'analytics_usage_read'
         | 'api_gateway_keys_read'
@@ -5719,6 +5734,8 @@ export interface components {
         | 'action_runs_read'
         | 'action_runs_write'
         | 'advisors_read'
+        | 'analytics_config_read'
+        | 'analytics_config_write'
         | 'analytics_logs_read'
         | 'analytics_usage_read'
         | 'api_gateway_keys_read'
@@ -8034,6 +8051,11 @@ export interface components {
         has_address: boolean
         id: string
         is_default: boolean
+        shared_payment_token: {
+          expires_at: number | null
+          is_expired: boolean
+          last4: string
+        } | null
         type: string
       }[]
       defaultPaymentMethodId: string | null
@@ -8719,7 +8741,7 @@ export interface components {
         | '48xlarge_optimized_cpu'
         | '48xlarge_high_memory'
       inserted_at: string
-      integration_source?: string | null
+      integration_source: string | null
       is_branch_enabled: boolean
       is_physical_backups_enabled: boolean
       lastDatabaseResizeAt?: string
@@ -10662,6 +10684,8 @@ export interface components {
         | 'action_runs_read'
         | 'action_runs_write'
         | 'advisors_read'
+        | 'analytics_config_read'
+        | 'analytics_config_write'
         | 'analytics_logs_read'
         | 'analytics_usage_read'
         | 'api_gateway_keys_read'
@@ -16029,11 +16053,14 @@ export interface operations {
       }
     }
     responses: {
+      /** @description Batch invitations result when using "emails" field. null/no body when using legacy "email" field. */
       201: {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/json': components['schemas']['CreateInvitationResponse']
+        }
       }
       /** @description Unauthorized */
       401: {
