@@ -455,6 +455,13 @@ services:
     container_name: supabase-db
     image: supabase/postgres:17.6.1.109
     restart: unless-stopped
+    # Nix-built postgres in this image makes syscalls (clone3 variants)
+    # that the default Docker seccomp profile filters, causing GPF in libc
+    # when postgres forks a client backend. Disabling seccomp for this
+    # container is the minimal-impact workaround until Supabase ships a
+    # profile that works with stock Docker.
+    security_opt:
+      - seccomp=unconfined
     volumes:
       - ./volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
       # Must be superuser to create event trigger
